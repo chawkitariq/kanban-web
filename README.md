@@ -7,6 +7,10 @@ A project management web app inspired by tools like Jira and OpenProject, built 
 - [Kanban Api](https://github.com/chawkitariq/kanban-api): Ensure the **Kanban Api** server is running.
 - [Docker](https://docs.docker.com/engine/install/): Install Docker and Docker Compose.
 
+## Setup
+
+- Copy the `.env.example` file to `.env` to configure your environment variables.
+
 ## Usage
 
 ### Developement
