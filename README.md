@@ -1,8 +1,11 @@
-# Kanban Web Project
+# Kanban Web
 
-## Summary
+A project management web app inspired by tools like Jira and OpenProject, built using the [Kanban Api](https://github.com/chawkitariq/kanban-api). It helps teams manage tasks and workflows using the Kanban methodology.
 
-- [Usage](#usage) : How to use application
+## Requirements
+
+- [Kanban Api](https://github.com/chawkitariq/kanban-api): Ensure the **Kanban Api** server is running.
+- [Docker](https://docs.docker.com/engine/install/): Install Docker and Docker Compose.
 
 ## Usage
 
@@ -11,22 +14,22 @@
 
 ```bash
 # start application
-sudo docker compose -f compose-dev.yml up
+docker compose -f docker-compose.dev.yml up
 ```
 
 ```bash
 # stop application
-sudo docker compose -f compose-dev.yml down
+docker compose -f docker-compose.dev.yml down
 ```
 
 ### Production
 
 ```bash
 # start application
-sudo docker compose -f compose-prod.yml up
+docker compose up
 ```
 
 ```bash
 # stop application
-sudo docker compose -f compose-prod.yml down
+docker compose down
 ```
