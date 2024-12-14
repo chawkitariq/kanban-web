@@ -1,0 +1,8 @@
+FROM node:22
+
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV PATH=$PATH:/home/node/.npm-global/bin
+
+COPY --chown=node:node --chmod=667 docker-entrypoint.sh /usr/local/bin
+
+WORKDIR /home/node/web
