@@ -12,7 +12,20 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar'
 import { BadgeAlert, FolderKanban } from 'lucide-react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
+
+const sideBarMenuItems = [
+  {
+    title: 'Projets',
+    url: '/projects',
+    icon: FolderKanban
+  },
+  {
+    title: 'Issues',
+    url: '/issues',
+    icon: BadgeAlert
+  }
+]
 
 export function DefaultLayout() {
   return (
@@ -26,22 +39,18 @@ export function DefaultLayout() {
         <Separator />
         <SidebarContent>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to="/projects">
-                  <FolderKanban />
-                  <span>Projets</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to="/issues">
-                  <BadgeAlert />
-                  <span>Issues</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {sideBarMenuItems.map((item) => (
+              <SidebarMenuItem>
+                <NavLink to={item.url}>
+                  {({ isActive }) => (
+                    <SidebarMenuButton isActive={isActive}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>

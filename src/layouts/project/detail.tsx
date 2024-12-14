@@ -20,10 +20,31 @@ import {
 } from 'lucide-react'
 import { Link, Outlet, useParams } from 'react-router-dom'
 
+const sideBarMenuItems = (id: string) => [
+  {
+    title: 'Statistiques',
+    url: `/projects/${id}`,
+    icon: ChartArea
+  },
+  {
+    title: 'Issues',
+    url: `/projects/${id}/issues`,
+    icon: BadgeAlert
+  },
+  {
+    title: 'Kanban',
+    url: `/projects/${id}/kanban`,
+    icon: Kanban
+  },
+  {
+    title: 'Gantt',
+    url: `/projects/${id}/gantt`,
+    icon: ChartGantt
+  }
+]
+
 export function ProjectDetailLayout() {
   const { id } = useParams()
-
-  console.log(id)
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -39,38 +60,17 @@ export function ProjectDetailLayout() {
         <Separator />
         <SidebarContent>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to={`/projects/${id}`}>
-                  <ChartArea />
-                  <span>Statistiques</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to={`/projects/${id}/issues`}>
-                  <BadgeAlert />
-                  <span>Issues</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to={`/projects/${id}/kanban`}>
-                  <Kanban />
-                  <span>Kanban</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to={`/projects/${id}/gantt`}>
-                  <ChartGantt />
-                  <span>Gantt</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {id &&
+              sideBarMenuItems(id).map((item) => (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      {item?.icon && <item.icon />}
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>
