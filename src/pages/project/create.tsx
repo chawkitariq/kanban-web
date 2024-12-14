@@ -14,7 +14,7 @@ import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { object, string } from 'yup'
 import { ProjectForm } from './_form'
-import { CreateProjectPayloadType } from '@/types'
+import { TCreateProjectPayload } from '@/types'
 
 const validationSchema = object().shape({
   title: string().required('Obligatoire!'),
@@ -37,7 +37,7 @@ function ProjectCreatePage() {
     }
   })
 
-  const form = useFormik<CreateProjectPayloadType>({
+  const form = useFormik<TCreateProjectPayload>({
     initialValues: {
       title: '',
       description: '',

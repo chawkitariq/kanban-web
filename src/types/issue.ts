@@ -1,4 +1,7 @@
-export type IssueType = {
+import { TProject } from './project'
+import { TUser } from './user'
+
+export type TIssue = {
   id: string
   title: string
   description: string
@@ -7,11 +10,15 @@ export type IssueType = {
   priority: string
   startAt: Date
   endAt: Date
+  project?: TProject
+  asignee?: TUser
+  author?: TUser
+  parent?: TIssue
   createdAt: Date
   updatedAt: Date
 }
 
-export type CreateIssuePayloadType = {
+export type TCreateIssuePayload = {
   title: string
   description: string
   status: string
@@ -21,9 +28,9 @@ export type CreateIssuePayloadType = {
   endAt: Date
 }
 
-export type UpdateIssuePayloadType = Partial<CreateIssuePayloadType>
+export type TUpdateIssuePayload = Partial<TCreateIssuePayload>
 
-export namespace IssueType {
+export namespace TIssue {
   export enum Type {
     Task = 'task',
     Story = 'story',
@@ -49,5 +56,6 @@ export namespace IssueType {
   }
 }
 
-export type IssueStatusLabelsType = { [key in IssueType.Status]: string }
-export type IssuePrioritiesLabelsType = { [key in IssueType.Priority]: string }
+export type TIssuesTypesLabels = { [key in TIssue.Type]: string }
+export type TIssuePrioritiesLabels = { [key in TIssue.Priority]: string }
+export type TIssueStatusLabels = { [key in TIssue.Status]: string }

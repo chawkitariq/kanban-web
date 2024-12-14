@@ -21,10 +21,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { ProjectApiService } from '@/services/project-api'
+import { Badge } from '@/components/ui/badge'
+import { IssueApiService } from '@/services/issue-api'
 import { DataTable } from '@/components/data-table'
+import { TIssue } from '@/types'
 
-function ProjectIndexPage() {
+function IssueIndexPage() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -33,13 +35,30 @@ function ProjectIndexPage() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: ProjectApiService.findAll
+  const { data: issues } = useQuery({
+    queryKey: ['issues'],
+    queryFn: () => IssueApiService.findAll()
   })
 
+  const navigate = useNavigate()
+
+  const queryClient = useQueryClient()
+
+  const { mutate: deleteIssue } = useMutation({
+    mutationKey: ['issues'],
+    mutationFn: IssueApiService.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['issues'] })
+    }
+  })
+
+  const tableData = React.useMemo(
+    () => (issues?.length ? issues : []),
+    [issues]
+  )
+
   const table = useReactTable({
-    data: projects ?? [],
+    data: tableData,
     columns: [
       {
         id: 'select',
@@ -104,6 +123,76 @@ function ProjectIndexPage() {
         )
       },
       {
+        accessorKey: 'project',
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Projet
+              <ArrowUpDown />
+            </Button>
+          )
+        },
+        cell: ({ row }) => (
+          <Badge>{row.getValue<TIssue['project']>('project')?.title}</Badge>
+        )
+      },
+      {
+        accessorKey: 'type',
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Type
+              <ArrowUpDown />
+            </Button>
+          )
+        },
+        cell: ({ row }) => <Badge>{row.getValue('type')}</Badge>
+      },
+      {
+        accessorKey: 'status',
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Statut
+              <ArrowUpDown />
+            </Button>
+          )
+        },
+        cell: ({ row }) => <Badge>{row.getValue('status')}</Badge>
+      },
+      {
+        accessorKey: 'priority',
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            >
+              Priorité
+              <ArrowUpDown />
+            </Button>
+          )
+        },
+        cell: ({ row }) => <Badge>{row.getValue('priority')}</Badge>
+      },
+      {
         accessorKey: 'startAt',
         header: ({ column }) => {
           return (
@@ -119,7 +208,9 @@ function ProjectIndexPage() {
           )
         },
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue('startAt')}</div>
+          <div className="lowercase">
+            {new Date(row.getValue('startAt'))?.toLocaleString()}
+          </div>
         )
       },
       {
@@ -138,7 +229,9 @@ function ProjectIndexPage() {
           )
         },
         cell: ({ row }) => (
-          <div className="lowercase">{row.getValue('endAt')}</div>
+          <div className="lowercase">
+            {new Date(row.getValue('endAt')).toLocaleString()}
+          </div>
         )
       },
       {
@@ -155,20 +248,18 @@ function ProjectIndexPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  onClick={() => navigate(`/projects/${row.original?.id}`)}
+                  onClick={() => navigate(`/issues/${row.original?.id}`)}
                 >
                   Voir
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() =>
-                    navigate(`/projects/${row.original?.id}/update`)
-                  }
+                  onClick={() => navigate(`/issues/${row.original?.id}/update`)}
                 >
                   Modifier
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-red-500"
-                  onClick={() => deleteProject(row.original?.id)}
+                  onClick={() => deleteIssue(row.original?.id)}
                 >
                   Supprimer
                 </DropdownMenuItem>
@@ -194,30 +285,17 @@ function ProjectIndexPage() {
     }
   })
 
-  const navigate = useNavigate()
-
-  const queryClient = useQueryClient()
-
-  const { mutate: deleteProject } = useMutation({
-    mutationKey: ['projects'],
-    mutationFn: ProjectApiService.delete,
-    onSuccess: () => {
-      queryClient.resetQueries({ queryKey: ['projects'] })
-    }
-  })
-
   return (
     <div className="p-4">
       <DataTable
         table={table}
         primaryButtonRender={() => (
-          <Button onClick={() => navigate('/projects/create')}>Ajouter</Button>
+          <Button onClick={() => navigate(`/issues/create`)}>Ajouter</Button>
         )}
       />
-
       <Outlet />
     </div>
   )
 }
 
-export default ProjectIndexPage
+export default IssueIndexPage

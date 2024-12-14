@@ -15,22 +15,20 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { ISSUE_PRIORITIES_LABELS, ISSUE_STATUS_LABELS } from '@/constants/issue'
-import { cn } from '@/lib/utils'
 import {
-  CreateIssuePayloadType,
-  IssueType,
-  UpdateIssuePayloadType
-} from '@/types'
+  ISSUE_PRIORITIES_LABELS,
+  ISSUE_STATUS_LABELS,
+  ISSUE_TYPES_LABELS
+} from '@/constants/issue'
+import { cn } from '@/lib/utils'
+import { TCreateIssuePayload, TIssue, TUpdateIssuePayload } from '@/types'
 import { format } from 'date-fns'
 import { useFormik } from 'formik'
 import { CalendarIcon } from 'lucide-react'
 import { forwardRef } from 'react'
 
 interface Props {
-  form: ReturnType<
-    typeof useFormik<CreateIssuePayloadType | UpdateIssuePayloadType>
-  >
+  form: ReturnType<typeof useFormik<TCreateIssuePayload | TUpdateIssuePayload>>
 }
 
 export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
@@ -45,6 +43,7 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
         <Input
           id="title"
           name="title"
+          defaultValue={form.values.title}
           onChange={form.handleChange}
           onBlur={form.handleBlur}
         />
@@ -57,8 +56,10 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
         <Textarea
           id="description"
           name="description"
+          defaultValue={form.values.description}
           onChange={form.handleChange}
           onBlur={form.handleBlur}
+          rows={10}
         />
         {form.errors.description && form.touched.description && (
           <p className="text-sm text-red-500">{form.errors.description}</p>
@@ -67,16 +68,16 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
       <div className="grid gap-2">
         <Label htmlFor="description">Type</Label>
         <Select
-          value={form.values.type}
+          defaultValue={form.values.type}
           onValueChange={(type) => form.setFieldValue('type', type)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Séléctionner un type" />
           </SelectTrigger>
           <SelectContent>
-            {Object.values(IssueType.Type).map((type) => (
+            {Object.values(TIssue.Type).map((type) => (
               <SelectItem key={type} value={type}>
-                {type}
+                {ISSUE_TYPES_LABELS[type]}
               </SelectItem>
             ))}
           </SelectContent>
@@ -88,14 +89,14 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
       <div className="grid gap-2">
         <Label htmlFor="description">Statut</Label>
         <Select
-          value={form.values.status}
+          defaultValue={form.values.status}
           onValueChange={(status) => form.setFieldValue('status', status)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Séléctionner un statut" />
           </SelectTrigger>
           <SelectContent>
-            {Object.values(IssueType.Status).map((status) => (
+            {Object.values(TIssue.Status).map((status) => (
               <SelectItem key={status} value={status}>
                 {ISSUE_STATUS_LABELS[status]}
               </SelectItem>
@@ -109,14 +110,14 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
       <div className="grid gap-2">
         <Label htmlFor="description">Priorité</Label>
         <Select
-          value={form.values.priority}
+          defaultValue={form.values.priority}
           onValueChange={(priority) => form.setFieldValue('priority', priority)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Séléctionner un priorité" />
           </SelectTrigger>
           <SelectContent>
-            {Object.values(IssueType.Priority).map((priority) => (
+            {Object.values(TIssue.Priority).map((priority) => (
               <SelectItem key={priority} value={priority}>
                 {ISSUE_PRIORITIES_LABELS[priority]}
               </SelectItem>
@@ -135,7 +136,7 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
               <Button
                 variant={'outline'}
                 className={cn(
-                  'w-[280px] justify-start text-left font-normal',
+                  'justify-start text-left font-normal',
                   !form.values.startAt && 'text-muted-foreground'
                 )}
               >
@@ -155,7 +156,9 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
             </PopoverContent>
           </Popover>
           {form.errors.startAt && form.touched.startAt && (
-            <p className="text-sm text-red-500">{form.errors.startAt as any}</p>
+            <p className="text-sm text-red-500">
+              {form.errors.startAt as string}
+            </p>
           )}
         </div>
         <div className="grid gap-2">
@@ -165,7 +168,7 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
               <Button
                 variant={'outline'}
                 className={cn(
-                  'w-[280px] justify-start text-left font-normal',
+                  'justify-start text-left font-normal',
                   !form.values.endAt && 'text-muted-foreground'
                 )}
               >
@@ -185,7 +188,9 @@ export const IssueForm = forwardRef<HTMLFormElement, Props>(({ form }, ref) => {
             </PopoverContent>
           </Popover>
           {form.errors.endAt && form.touched.endAt && (
-            <p className="text-sm text-red-500">{form.errors.endAt as any}</p>
+            <p className="text-sm text-red-500">
+              {form.errors.endAt as string}
+            </p>
           )}
         </div>
       </div>

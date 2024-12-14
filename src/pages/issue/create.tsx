@@ -7,13 +7,15 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { api } from '@/configs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { object, string } from 'yup'
 import { IssueForm } from './_form'
+import { IssueApiService } from '@/services/issue-api'
+import { TCreateIssuePayload, TIssue } from '@/types'
+import { ButtonLoading } from '@/components/button-loading'
 
 const validationSchema = object().shape({
   title: string().required('Obligatoire!'),
@@ -30,56 +32,66 @@ function IssueCreatePage() {
 
   const queryClient = useQueryClient()
 
-  const { isPending, mutate: createProject } = useMutation({
-    mutationKey: ['projects'],
-    mutationFn: async (payload: any) => {
-      const { data } = await api.post('/projects', payload)
-      return data
-    },
+  const {
+    isPending: isCreateIssuePending,
+    mutate: createIssue,
+    reset: resetCreateIssue
+  } = useMutation({
+    mutationKey: ['issues'],
+    mutationFn: IssueApiService.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] })
-      navigate('/projects')
+      queryClient.invalidateQueries({ queryKey: ['issues'] })
+      navigate('/issues')
     }
   })
 
-  const form = useFormik({
+  const form = useFormik<TCreateIssuePayload>({
     initialValues: {
       title: '',
       description: '',
+      type: TIssue.Type.Task,
+      status: TIssue.Status.Open,
+      priority: TIssue.Priority.Medium,
       startAt: new Date(),
       endAt: new Date()
     },
     validationSchema: validationSchema,
-    onSubmit: (data) => createProject(data)
+    onSubmit: (data) => createIssue(data)
   })
+
+  const handleCancel = useCallback(() => {
+    resetCreateIssue()
+    navigate('/issues')
+  }, [navigate, resetCreateIssue])
 
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog open={true} onOpenChange={() => navigate('/projects')}>
+    <Dialog open={true} onOpenChange={handleCancel}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Nouveau projet</DialogTitle>
+          <DialogTitle>Creation</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <IssueForm form={form} ref={formRef} />
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => navigate('/projects')}
-            disabled={isPending}
+            onClick={handleCancel}
+            disabled={isCreateIssuePending}
           >
             Annuler
           </Button>
-          <Button
+          <ButtonLoading
             onClick={() => formRef?.current?.requestSubmit()}
-            disabled={isPending}
+            disabled={isCreateIssuePending}
+            loading={isCreateIssuePending}
           >
             Ajouter
-          </Button>
+          </ButtonLoading>
         </DialogFooter>
       </DialogContent>
     </Dialog>

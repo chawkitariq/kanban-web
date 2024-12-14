@@ -1,4 +1,4 @@
-export type ProjectType = {
+export type TProject = {
   id: string
   title: string
   description: string
@@ -8,11 +8,11 @@ export type ProjectType = {
   updatedAt: Date
 }
 
-export type CreateProjectPayloadType = {
+export type TCreateProjectPayload = {
   title: string
   description: string
   startAt: Date
   endAt: Date
 }
 
-export type UpdateProjectPayloadType = Partial<CreateProjectPayloadType>
+export type TUpdateProjectPayload = Partial<TCreateProjectPayload>

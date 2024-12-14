@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { CreateProjectPayloadType, UpdateProjectPayloadType } from '@/types'
+import { TCreateProjectPayload, TUpdateProjectPayload } from '@/types'
 import { format } from 'date-fns'
 import { useFormik } from 'formik'
 import { CalendarIcon } from 'lucide-react'
@@ -17,7 +17,7 @@ import { forwardRef } from 'react'
 
 interface Props {
   form: ReturnType<
-    typeof useFormik<CreateProjectPayloadType | UpdateProjectPayloadType>
+    typeof useFormik<TCreateProjectPayload | TUpdateProjectPayload>
   >
 }
 

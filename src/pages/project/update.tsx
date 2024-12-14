@@ -9,7 +9,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { ProjectApiService } from '@/services/project-api'
-import { UpdateProjectPayloadType } from '@/types'
+import { TUpdateProjectPayload } from '@/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
 import { useRef } from 'react'
@@ -27,7 +27,7 @@ function ProjectUpdatePage() {
     queryFn: () => ProjectApiService.findOne(id!)
   })
 
-  const form = useFormik<UpdateProjectPayloadType>({
+  const form = useFormik<TUpdateProjectPayload>({
     initialValues: {
       title: project?.title,
       description: project?.description,
@@ -44,7 +44,7 @@ function ProjectUpdatePage() {
 
   const { isPending, mutate: updateProject } = useMutation({
     mutationKey: ['projects', id],
-    mutationFn: async (payload: UpdateProjectPayloadType) => {
+    mutationFn: async (payload: TUpdateProjectPayload) => {
       return ProjectApiService.update(id!, payload)
     },
     onSuccess: () => {

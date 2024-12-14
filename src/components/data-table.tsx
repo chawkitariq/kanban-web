@@ -18,19 +18,19 @@ import {
   TableRow
 } from '@/components/ui/table'
 
-interface Props {
-  table: TanstackTable<any>
+interface Props<TData> {
+  table: TanstackTable<TData>
   primaryButtonRenderBefore?: () => React.ReactNode
   primaryButtonRender?: () => React.ReactNode
   primaryButtonRenderAfter?: () => React.ReactNode
 }
 
-export function DataTable({
+export function DataTable<TData>({
   table,
   primaryButtonRenderBefore,
   primaryButtonRender,
   primaryButtonRenderAfter
-}: Props) {
+}: Props<TData>) {
   return (
     <>
       <div className="flex items-center justify-between py-4">

@@ -8,13 +8,15 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { IssueApiService } from '@/services/issue-api'
-import { UpdateIssuePayloadType } from '@/types'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { TUpdateIssuePayload } from '@/types'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { object, string } from 'yup'
 import { IssueForm } from './_form'
+import { ContentLoader } from '@/components/content-loader'
+import { ButtonLoading } from '@/components/button-loading'
 
 const validationSchema = object().shape({
   title: string().required('Obligatoire!'),
@@ -27,68 +29,82 @@ const validationSchema = object().shape({
 })
 
 function IssueUpdatePage() {
-  const { id: projectId, issueId } = useParams()
+  const { id } = useParams()
+
+  const { isPending: isFindOneIssuePending, data: issue } = useQuery({
+    queryKey: ['issues', id],
+    queryFn: () => IssueApiService.findOne(id!)
+  })
 
   const navigate = useNavigate()
 
   const queryClient = useQueryClient()
 
-  const { isPending, mutate: updateIssue } = useMutation({
-    mutationKey: ['issues', issueId],
-    mutationFn: async (payload: UpdateIssuePayloadType) => {
-      return IssueApiService.update(issueId!, payload)
+  const {
+    isPending: isUpdateIssuePending,
+    mutate: updateIssue,
+    reset: resetUpdateIssue
+  } = useMutation({
+    mutationKey: ['issues', id],
+    mutationFn: async (payload: TUpdateIssuePayload) => {
+      return IssueApiService.update(id!, payload)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['issues'] })
-      navigate(!projectId ? '/issues' : `/projects/${projectId}/issues`)
+      navigate('/issues')
     }
   })
 
-  const form = useFormik({
+  const form = useFormik<TUpdateIssuePayload>({
     initialValues: {
-      title: '',
-      description: '',
-      startAt: undefined,
-      endAt: undefined
+      title: issue?.title,
+      description: issue?.description,
+      status: issue?.status,
+      type: issue?.type,
+      priority: issue?.priority,
+      startAt: issue?.startAt,
+      endAt: issue?.endAt
     },
     validationSchema: validationSchema,
-    onSubmit: (data) => updateIssue(data)
+    onSubmit: (data) => updateIssue(data),
+    enableReinitialize: true
   })
+
+  const handleCancel = useCallback(() => {
+    resetUpdateIssue()
+    navigate('/issues')
+  }, [navigate, resetUpdateIssue])
 
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog
-      open={true}
-      onOpenChange={() =>
-        navigate(!projectId ? '/issues' : `/projects/${projectId}/issues`)
-      }
-    >
+    <Dialog open={true} onOpenChange={handleCancel}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Modification Issue</DialogTitle>
+          <DialogTitle>Modification</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <IssueForm form={form} ref={formRef} />
+        <ContentLoader loading={isFindOneIssuePending}>
+          <IssueForm form={form} ref={formRef} />
+        </ContentLoader>
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() =>
-              navigate(!projectId ? '/issues' : `/projects/${projectId}/issues`)
-            }
-            disabled={isPending}
+            onClick={handleCancel}
+            disabled={isUpdateIssuePending}
           >
             Annuler
           </Button>
-          <Button
+          <ButtonLoading
             onClick={() => formRef?.current?.requestSubmit()}
-            disabled={isPending}
+            disabled={isUpdateIssuePending}
+            loading={isUpdateIssuePending}
           >
-            Ajouter
-          </Button>
+            Confirmer
+          </ButtonLoading>
         </DialogFooter>
       </DialogContent>
     </Dialog>

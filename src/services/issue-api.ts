@@ -1,32 +1,32 @@
 import { api } from '@/configs'
 import {
-  CreateIssuePayloadType,
-  IssueType,
-  UpdateIssuePayloadType
+  TCreateIssuePayload,
+  TIssue,
+  TUpdateIssuePayload
 } from '@/types'
 
 export class IssueApiService {
   public static async create(
-    payload: CreateIssuePayloadType
-  ): Promise<IssueType> {
+    payload: TCreateIssuePayload
+  ): Promise<TIssue> {
     const { data } = await api.post('/issues', payload)
     return data
   }
 
-  public static async findAll(): Promise<IssueType[]> {
+  public static async findAll(): Promise<TIssue[]> {
     const { data } = await api.get('/issues')
     return data
   }
 
-  public static async findOne(id: string): Promise<IssueType> {
+  public static async findOne(id: string): Promise<TIssue> {
     const { data } = await api.get(`/issues/${id}`)
     return data
   }
 
   public static async update(
     id: string,
-    payload: UpdateIssuePayloadType
-  ): Promise<IssueType> {
+    payload: TUpdateIssuePayload
+  ): Promise<TIssue> {
     const { data } = await api.patch(`/issues/${id}`, payload)
     return data
   }

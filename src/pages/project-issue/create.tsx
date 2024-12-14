@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { ProjectIssueApiService } from '@/services/project-issue-api'
-import { CreateIssuePayloadType, IssueType } from '@/types'
+import { TCreateIssuePayload, TIssue } from '@/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
 import { useRef } from 'react'
@@ -35,7 +35,7 @@ function ProjectIssueCreatePage() {
 
   const { isPending, mutate: createProject } = useMutation({
     mutationKey: ['projects', id, 'issues/create'],
-    mutationFn: async (payload: CreateIssuePayloadType) => {
+    mutationFn: async (payload: TCreateIssuePayload) => {
       return ProjectIssueApiService.create(id!, payload)
     },
     onSuccess: () => {
@@ -44,13 +44,13 @@ function ProjectIssueCreatePage() {
     }
   })
 
-  const form = useFormik<CreateIssuePayloadType>({
+  const form = useFormik<TCreateIssuePayload>({
     initialValues: {
       title: '',
       description: '',
-      type: IssueType.Type.Task,
-      status: IssueType.Status.Open,
-      priority: IssueType.Priority.Medium,
+      type: TIssue.Type.Task,
+      status: TIssue.Status.Open,
+      priority: TIssue.Priority.Medium,
       startAt: new Date(),
       endAt: new Date()
     },
