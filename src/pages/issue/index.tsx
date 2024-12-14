@@ -23,8 +23,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { IssueApiService } from '@/services/issue-api'
-import { DataTable } from '@/components/data-table'
 import { TIssue } from '@/types'
+import { DataTableAdvanced } from '@/components/data-table'
 
 function IssueIndexPage() {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -287,9 +287,9 @@ function IssueIndexPage() {
 
   return (
     <div>
-      <DataTable
+      <DataTableAdvanced
         table={table}
-        primaryButtonRender={() => (
+        primaryButton={() => (
           <Button onClick={() => navigate(`/issues/create`)}>Ajouter</Button>
         )}
       />

@@ -22,7 +22,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { ProjectApiService } from '@/services/project-api'
-import { DataTable } from '@/components/data-table'
+import { DataTableAdvanced } from '@/components/data-table/data-table-advanced'
 
 function ProjectIndexPage() {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -208,9 +208,9 @@ function ProjectIndexPage() {
 
   return (
     <>
-      <DataTable
+      <DataTableAdvanced
         table={table}
-        primaryButtonRender={() => (
+        primaryButton={() => (
           <Button onClick={() => navigate('/projects/create')}>Ajouter</Button>
         )}
       />

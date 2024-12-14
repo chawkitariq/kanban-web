@@ -24,7 +24,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { ProjectIssueApiService } from '@/services/project-issue-api'
 import { IssueApiService } from '@/services/issue-api'
-import { DataTable } from '@/components/data-table'
+import { DataTableAdvanced } from '@/components/data-table/data-table-advanced'
 
 function ProjectIssueIndexPage() {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -269,9 +269,9 @@ function ProjectIssueIndexPage() {
 
   return (
     <div>
-      <DataTable
+      <DataTableAdvanced
         table={table}
-        primaryButtonRender={() => (
+        primaryButton={() => (
           <Button onClick={() => navigate(`/projects/${id}/issues/create`)}>
             Ajouter
           </Button>
