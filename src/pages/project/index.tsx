@@ -23,6 +23,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { ProjectApiService } from '@/services/project-api'
 import { DataTableAdvanced } from '@/components/data-table/data-table-advanced'
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
+import { DataTableColumnSortable } from '@/components/data-table'
 
 function ProjectIndexPage() {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -67,38 +69,18 @@ function ProjectIndexPage() {
       },
       {
         accessorKey: 'title',
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === 'asc')
-              }
-            >
-              Titre
-              <ArrowUpDown />
-            </Button>
-          )
-        },
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Titre" />
+        ),
         cell: ({ row }) => (
           <div className="lowercase">{row.getValue('title')}</div>
         )
       },
       {
         accessorKey: 'description',
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === 'asc')
-              }
-            >
-              Description
-              <ArrowUpDown />
-            </Button>
-          )
-        },
+        header: ({ column }) => (
+          <DataTableColumnSortable column={column} title="Description" />
+        ),
         cell: ({ row }) => (
           <div className="lowercase">{row.getValue('description')}</div>
         )

@@ -1,32 +1,41 @@
-import { ChevronDown } from 'lucide-react'
+import { Settings2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu'
 import { IDataTableProps } from './data-table'
 
-type IDataTableColumnsVisibilityProps<TData> = Pick<
-  IDataTableProps<TData>,
-  'table'
->
+type IDataTableViewOptionsProps<TData> = Pick<IDataTableProps<TData>, 'table'>
 
-export const DataTableColumnsVisibility = <TData,>({
+export const DataTableViewOptions = <TData,>({
   table
-}: IDataTableColumnsVisibilityProps<TData>) => {
+}: IDataTableViewOptionsProps<TData>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="ml-auto">
-          Colonnes <ChevronDown />
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
+          <Settings2 />
+          Colonnes
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-[150px]">
+        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         {table
           .getAllColumns()
-          .filter((column) => column.getCanHide())
+          .filter(
+            (column) =>
+              typeof column.accessorFn !== 'undefined' && column.getCanHide()
+          )
           .map((column) => {
             return (
               <DropdownMenuCheckboxItem

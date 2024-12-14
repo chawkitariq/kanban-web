@@ -23,6 +23,9 @@ export type TCreateIssuePayload = {
   description: string
   status: string
   type: string
+  project: string
+  asignee: string
+  parent?: string
   priority: string
   startAt: Date
   endAt: Date
