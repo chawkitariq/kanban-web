@@ -29,7 +29,7 @@ function ProjectKanbanPage() {
   }
 
   return (
-    <div className="grid gap-4 p-4">
+    <div className="grid gap-4">
       <Button asChild className="ml-auto">
         <Link to={`/projects/${id}/issues/create`}>Ajouter</Link>
       </Button>

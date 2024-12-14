@@ -207,7 +207,7 @@ function ProjectIndexPage() {
   })
 
   return (
-    <div className="p-4">
+    <>
       <DataTable
         table={table}
         primaryButtonRender={() => (
@@ -216,7 +216,7 @@ function ProjectIndexPage() {
       />
 
       <Outlet />
-    </div>
+    </>
   )
 }
 

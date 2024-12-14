@@ -219,11 +219,6 @@ function ProjectIssueIndexPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
-                  onClick={() => navigate(`/projects/${row.original?.id}`)}
-                >
-                  Voir
-                </DropdownMenuItem>
-                <DropdownMenuItem
                   onClick={() =>
                     navigate(
                       `/projects/${id}/issues/${row.original?.id}/update`
@@ -273,7 +268,7 @@ function ProjectIssueIndexPage() {
   })
 
   return (
-    <div className="p-4">
+    <div>
       <DataTable
         table={table}
         primaryButtonRender={() => (

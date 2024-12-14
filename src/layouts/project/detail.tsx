@@ -3,6 +3,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -59,24 +61,28 @@ export function ProjectDetailLayout() {
         </SidebarHeader>
         <Separator />
         <SidebarContent>
-          <SidebarMenu>
-            {id &&
-              sideBarMenuItems(id).map((item) => (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      {item?.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-          </SidebarMenu>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {id &&
+                  sideBarMenuItems(id).map((item) => (
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to={item.url}>
+                          {item?.icon && <item.icon />}
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <main>
+        <main className="p-2">
           <SidebarTrigger />
           <Outlet />
         </main>

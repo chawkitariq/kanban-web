@@ -3,6 +3,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -38,26 +40,30 @@ export function DefaultLayout() {
         </SidebarHeader>
         <Separator />
         <SidebarContent>
-          <SidebarMenu>
-            {sideBarMenuItems.map((item) => (
-              <SidebarMenuItem>
-                <NavLink to={item.url}>
-                  {({ isActive }) => (
-                    <SidebarMenuButton isActive={isActive}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  )}
-                </NavLink>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {sideBarMenuItems.map((item, i) => (
+                  <SidebarMenuItem key={i}>
+                    <NavLink to={item.url}>
+                      {({ isActive }) => (
+                        <SidebarMenuButton isActive={isActive}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      )}
+                    </NavLink>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <main>
-          <SidebarTrigger />
+        <SidebarTrigger />
+        <main className="p-2">
           <Outlet />
         </main>
       </SidebarInset>

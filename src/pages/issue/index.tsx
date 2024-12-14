@@ -286,7 +286,7 @@ function IssueIndexPage() {
   })
 
   return (
-    <div className="p-4">
+    <div>
       <DataTable
         table={table}
         primaryButtonRender={() => (
