@@ -10,7 +10,7 @@ import {
 import { ProjectApiService } from '@/services/project-api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { object, string } from 'yup'
 import { ProjectForm } from './_form'
@@ -28,7 +28,11 @@ function ProjectCreatePage() {
 
   const queryClient = useQueryClient()
 
-  const { isPending, mutate: createProject } = useMutation({
+  const {
+    isPending: isCreateProjectPending,
+    mutate: createProject,
+    reset: resetCreateProject
+  } = useMutation({
     mutationKey: ['projects'],
     mutationFn: ProjectApiService.create,
     onSuccess: () => {
@@ -48,10 +52,15 @@ function ProjectCreatePage() {
     onSubmit: (data) => createProject(data)
   })
 
+  const handleClosePage = useCallback(() => {
+    resetCreateProject()
+    navigate('/projects')
+  }, [navigate, resetCreateProject])
+
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog open={true} onOpenChange={() => navigate('/projects')}>
+    <Dialog open={true} onOpenChange={handleClosePage}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -64,14 +73,14 @@ function ProjectCreatePage() {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => navigate('/projects')}
-            disabled={isPending}
+            onClick={handleClosePage}
+            disabled={isCreateProjectPending}
           >
             Annuler
           </Button>
           <Button
             onClick={() => formRef?.current?.requestSubmit()}
-            disabled={isPending}
+            disabled={isCreateProjectPending}
           >
             Ajouter
           </Button>

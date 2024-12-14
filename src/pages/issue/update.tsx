@@ -70,7 +70,7 @@ function IssueUpdatePage() {
     enableReinitialize: true
   })
 
-  const handleCancel = useCallback(() => {
+  const handleClosePage = useCallback(() => {
     resetUpdateIssue()
     navigate('/issues')
   }, [navigate, resetUpdateIssue])
@@ -78,7 +78,7 @@ function IssueUpdatePage() {
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog open={true} onOpenChange={handleCancel}>
+    <Dialog open={true} onOpenChange={handleClosePage}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -93,7 +93,7 @@ function IssueUpdatePage() {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={handleCancel}
+            onClick={handleClosePage}
             disabled={isUpdateIssuePending}
           >
             Annuler

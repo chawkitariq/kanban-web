@@ -59,7 +59,7 @@ function IssueCreatePage() {
     onSubmit: (data) => createIssue(data)
   })
 
-  const handleCancel = useCallback(() => {
+  const handleClosePage = useCallback(() => {
     resetCreateIssue()
     navigate('/issues')
   }, [navigate, resetCreateIssue])
@@ -67,7 +67,7 @@ function IssueCreatePage() {
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog open={true} onOpenChange={handleCancel}>
+    <Dialog open={true} onOpenChange={handleClosePage}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -80,7 +80,7 @@ function IssueCreatePage() {
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={handleCancel}
+            onClick={handleClosePage}
             disabled={isCreateIssuePending}
           >
             Annuler

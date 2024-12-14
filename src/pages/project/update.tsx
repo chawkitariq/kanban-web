@@ -12,10 +12,11 @@ import { ProjectApiService } from '@/services/project-api'
 import { TUpdateProjectPayload } from '@/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useFormik } from 'formik'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { object } from 'yup'
 import { ProjectForm } from './_form'
+import { ButtonLoading } from '@/components/button-loading'
 
 const validationSchema = object().shape({})
 
@@ -27,22 +28,15 @@ function ProjectUpdatePage() {
     queryFn: () => ProjectApiService.findOne(id!)
   })
 
-  const form = useFormik<TUpdateProjectPayload>({
-    initialValues: {
-      title: project?.title,
-      description: project?.description,
-      startAt: project?.startAt,
-      endAt: project?.endAt
-    },
-    validationSchema: validationSchema,
-    onSubmit: (data) => updateProject(data)
-  })
-
   const navigate = useNavigate()
 
   const queryClient = useQueryClient()
 
-  const { isPending, mutate: updateProject } = useMutation({
+  const {
+    isPending: isUpdateProjectPending,
+    mutate: updateProject,
+    reset: resetUpdateProject
+  } = useMutation({
     mutationKey: ['projects', id],
     mutationFn: async (payload: TUpdateProjectPayload) => {
       return ProjectApiService.update(id!, payload)
@@ -53,10 +47,27 @@ function ProjectUpdatePage() {
     }
   })
 
+  const form = useFormik<TUpdateProjectPayload>({
+    initialValues: {
+      title: project?.title,
+      description: project?.description,
+      startAt: project?.startAt,
+      endAt: project?.endAt
+    },
+    validationSchema: validationSchema,
+    onSubmit: (data) => updateProject(data),
+    enableReinitialize: true
+  })
+
+  const handleClosePage = useCallback(() => {
+    resetUpdateProject()
+    navigate('/projects')
+  }, [navigate, resetUpdateProject])
+
   const formRef = useRef<HTMLFormElement>(null!)
 
   return (
-    <Dialog open={true} onOpenChange={() => navigate('/projects')}>
+    <Dialog open={true} onOpenChange={handleClosePage}>
       <DialogContent
         className="min-w-[600px] max-w-[600px]"
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -65,23 +76,24 @@ function ProjectUpdatePage() {
           <DialogTitle>Modification du projet</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <ContentLoader loading={isFindOneProjectPending || !project}>
+        <ContentLoader loading={isFindOneProjectPending}>
           <ProjectForm form={form} ref={formRef} />
         </ContentLoader>
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => navigate('/projects')}
-            disabled={isPending}
+            onClick={handleClosePage}
+            disabled={isUpdateProjectPending}
           >
             Annuler
           </Button>
-          <Button
+          <ButtonLoading
             onClick={() => formRef?.current?.requestSubmit()}
-            disabled={isPending}
+            disabled={isUpdateProjectPending}
+            loading={isUpdateProjectPending}
           >
-            Ajouter
-          </Button>
+            Confirmer
+          </ButtonLoading>
         </DialogFooter>
       </DialogContent>
     </Dialog>

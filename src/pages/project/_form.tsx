@@ -50,6 +50,7 @@ export const ProjectForm = forwardRef<HTMLFormElement, Props>(
             value={form.values.description}
             onChange={form.handleChange}
             onBlur={form.handleBlur}
+            rows={10}
           />
           {form.errors.description && form.touched.description && (
             <p className="text-sm text-red-500">{form.errors.description}</p>
@@ -84,7 +85,7 @@ export const ProjectForm = forwardRef<HTMLFormElement, Props>(
             </Popover>
             {form.errors.startAt && form.touched.startAt && (
               <p className="text-sm text-red-500">
-                {form.errors.startAt as any}
+                {form.errors.startAt as string}
               </p>
             )}
           </div>
@@ -115,7 +116,9 @@ export const ProjectForm = forwardRef<HTMLFormElement, Props>(
               </PopoverContent>
             </Popover>
             {form.errors.endAt && form.touched.endAt && (
-              <p className="text-sm text-red-500">{form.errors.endAt as any}</p>
+              <p className="text-sm text-red-500">
+                {form.errors.endAt as string}
+              </p>
             )}
           </div>
         </div>
