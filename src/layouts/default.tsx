@@ -1,23 +1,13 @@
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '@/components/ui/collapsible'
+import { Separator } from '@/components/ui/separator'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
@@ -26,65 +16,33 @@ import { Link, Outlet } from 'react-router-dom'
 
 export function DefaultLayout() {
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen>
       <Sidebar side="left">
-        <SidebarHeader></SidebarHeader>
+        <SidebarHeader>
+          <Link className="truncate font-semibold" to="/">
+            Kanban
+          </Link>
+        </SidebarHeader>
+        <Separator />
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Kanban</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <Collapsible defaultOpen className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton asChild>
-                        <Link to="/projects">
-                          <FolderKanban />
-                          <span>Projets</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton asChild>
-                            <Link to="/projects/create">
-                              <FolderKanban />
-                              <span>Nouveau</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-                <Collapsible defaultOpen className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton asChild>
-                        <Link to="/issues">
-                          <BadgeAlert />
-                          <span>Issues</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubItem>
-                          <SidebarMenuSubButton asChild>
-                            <Link to="/issues/create">
-                              <FolderKanban />
-                              <span>Nouveau</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/projects">
+                  <FolderKanban />
+                  <span>Projets</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/issues">
+                  <BadgeAlert />
+                  <span>Issues</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>
       </Sidebar>

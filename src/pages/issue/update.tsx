@@ -72,8 +72,8 @@ function IssueUpdatePage() {
 
   const handleClosePage = useCallback(() => {
     resetUpdateIssue()
-    navigate('/issues')
-  }, [navigate, resetUpdateIssue])
+    navigate(`/projects/${id}/issues`)
+  }, [id, navigate, resetUpdateIssue])
 
   const formRef = useRef<HTMLFormElement>(null!)
 

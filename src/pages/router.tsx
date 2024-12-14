@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import ProjectIndexPage from './project'
 import ProjectCreatePage from './project/create'
 import ProjectDetailIndexPage from './project/detail'
@@ -18,15 +18,19 @@ export const router = createBrowserRouter([
     element: <DefaultLayout />,
     children: [
       {
+        index: true,
+        element: <Navigate to="/projects" />
+      },
+      {
         path: '/projects',
         element: <ProjectIndexPage />,
         children: [
           {
-            path: '/projects/create',
+            path: 'create',
             element: <ProjectCreatePage />
           },
           {
-            path: '/projects/:id/update',
+            path: ':id/update',
             element: <ProjectUpdatePage />
           }
         ]
@@ -36,11 +40,11 @@ export const router = createBrowserRouter([
         element: <IssueIndexPage />,
         children: [
           {
-            path: '/issues/create',
+            path: 'create',
             element: <IssueCreatePage />
           },
           {
-            path: '/issues/:id/update',
+            path: ':id/update',
             element: <IssueUpdatePage />
           }
         ]
@@ -56,21 +60,21 @@ export const router = createBrowserRouter([
         element: <ProjectDetailIndexPage />
       },
       {
-        path: '/projects/:id/issues',
+        path: 'issues',
         element: <ProjectIssueIndexPage />,
         children: [
           {
-            path: '/projects/:id/issues/create',
+            path: 'create',
             element: <ProjectIssueCreatePage />
           },
           {
-            path: '/projects/:id/issues/:issueId/update',
+            path: ':issueId/update',
             element: <IssueUpdatePage />
           }
         ]
       },
       {
-        path: '/projects/:id/kanban',
+        path: 'kanban',
         element: <ProjectKanbanPage />
       }
     ]

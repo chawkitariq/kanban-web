@@ -1,17 +1,23 @@
+import { Separator } from '@/components/ui/separator'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
+import {
+  BadgeAlert,
+  ChartArea,
+  ChartGantt,
+  Kanban,
+  MoveLeft
+} from 'lucide-react'
 import { Link, Outlet, useParams } from 'react-router-dom'
 
 export function ProjectDetailLayout() {
@@ -22,33 +28,50 @@ export function ProjectDetailLayout() {
   return (
     <SidebarProvider defaultOpen={true}>
       <Sidebar side="left">
-        <SidebarHeader></SidebarHeader>
+        <SidebarHeader>
+          <SidebarMenuButton asChild>
+            <Link to="/projects">
+              <MoveLeft />
+              <span>Projets</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarHeader>
+        <Separator />
         <SidebarContent>
-          <SidebarGroup>
-            1
-            <SidebarGroupLabel>
-              <Link to="/">Kanban</Link>
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <Link to={`/projects/${id}`}>
-                    <span>Project</span>
-                  </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <Link to={`/projects/${id}/issues`}>
-                    <span>Issues</span>
-                  </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <Link to={`/projects/${id}/kanban`}>
-                    <span>Kanban</span>
-                  </Link>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to={`/projects/${id}`}>
+                  <ChartArea />
+                  <span>Statistiques</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to={`/projects/${id}/issues`}>
+                  <BadgeAlert />
+                  <span>Issues</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to={`/projects/${id}/kanban`}>
+                  <Kanban />
+                  <span>Kanban</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to={`/projects/${id}/gantt`}>
+                  <ChartGantt />
+                  <span>Gantt</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarContent>
         <SidebarFooter></SidebarFooter>
       </Sidebar>
