@@ -20,7 +20,7 @@ import {
   ISSUE_STATUS_LABELS,
   ISSUE_TYPES_LABELS
 } from '@/constants/issue'
-import { cn } from '@/lib/utils'
+import { cn } from '@/libs/utils'
 import { TCreateIssuePayload, TIssue, TUpdateIssuePayload } from '@/types'
 import { format } from 'date-fns'
 import { useFormik } from 'formik'
